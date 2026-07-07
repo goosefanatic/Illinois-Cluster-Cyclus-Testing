@@ -1,0 +1,8 @@
+<simulation>
+    <control>
+        <duration>720</duration>
+        <startmonth>1</startmonth>
+        <startyear>2018</startmonth>
+        <decay>never</decay>
+    </control>
+</simulation>

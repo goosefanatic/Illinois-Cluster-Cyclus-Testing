@@ -1,3 +1,15 @@
+<!--
+Create a simulation with some duration (months), start month, start year, and decay type (never, manual, lazy)
+
+# Cyclus can operate in 3 decay modes, with 1 additional mode likely to be added in a future release:
+
+# never, all decay is turned off
+# manual, meaning it is only on if the individual archetype decays their own inventory
+# lazy, which will compute decay only when archetypes fetch a particular composition.
+
+# never is often used because the half-lives of the uranium, plutonium, and caesium isotopes are usually much longer than the simulation
+# 137Cs is shortest (~30 years), so thats the one to watch for to decide if you want to include decay or not -->
+
 <simulation>
     <control>
         <duration>720</duration>
@@ -6,3 +18,157 @@
         <decay>never</decay>
     </control>
 </simulation>
+
+<!--
+# Determine types of archetypes, aka types of facilities in the fuel cycle
+# Source: like a mine
+# Enrichment: tf you think it is
+# Reactor: fresh and used fuel into more used fuel with composition indicative of more burnup
+# Sink: like a waste repository -->
+<archetypes>
+    <spec>
+        <lib>cycamore</lib>
+        <name>Source</name>
+    </spec>
+    <spec>
+        <lib>cycamore</lib>
+        <name>Enrichment</name>
+    </spec>
+    <spec>
+        <lib>cycamore</lib>
+        <name>Reactor</name>
+    </spec>
+    <spec>
+        <lib>cycamore</lib>
+        <name>Sink</name>
+    </spec>
+</archetypes>
+
+<!--
+# Commodities: complex system that allows facilities to trade with each other, make and accept bids, and use different suppliers 
+# Usually a commodity is a material produced by a facility, so we define our materials once so we don't have to repeatedly say what used fuel is made of
+
+# Basis: mass or atom
+# id: nuclide in the form ZZAAA, or by name like U235 or U-235
+
+# natural uranium (from source into enrichment, these aren't CANDU or IPHWR) -->
+<recipe>
+    <name>nat_u</name>
+    <basis>mass</basis>
+    <nuclide>
+        <id>92235</id>
+        <comp>0.00711</comp>
+    </nuclide>
+    <nuclide>
+        <id>92238</id>
+        <comp>0.99289</comp>
+    </nuclide>
+</recipe>
+
+<!-- fresh fuel, we aren't reprocessing in this example so it's all just UOX instead of MOX -->
+<recipe>
+    <name>fresh_uox</name>
+    <basis>mass</basis>
+    <nuclide>
+        <id>92235</id>
+        <comp>0.04</comp>
+    </nuclide>
+    <nuclide>
+        <id>92238</id>
+        <comp>0.96</comp>
+    </nuclide>
+</recipe>
+
+<!-- used fuel, only fission product that we're modeling is 137Cs because this is a simple model. We're also not modeling higher plutonia above 239 because idfc -->
+<recipe>
+    <name>spent_uox</name>
+    <basis>mass</basis>
+    <nuclide>
+        <id>92235</id>
+        <comp>0.011</comp>
+    </nuclide>
+    <nuclide>
+        <id>92238</id>
+        <comp>0.94</comp>
+    </nuclide>
+    <nuclide>
+        <id>94239</id>
+        <comp>0.009</comp>
+    </nuclide>
+    <nuclide>
+        <id>55137</id>
+        <comp>0.04</comp>
+    </nuclide>
+</recipe>
+
+<!-- extra recipe code, copy and paste this to add more materials 
+<recipe>
+    <name></name>
+    <basis></basis>
+    <nuclide>
+        <id></id>
+        <comp></comp>
+    </nuclide>
+    <nuclide>
+        <id></id>
+        <comp></comp>
+    </nuclide>
+    <nuclide>
+        <id></id>
+        <comp></comp>
+    </nuclide>
+    <nuclide>
+        <id></id>
+        <comp></comp>
+    </nuclide>
+</recipe>
+-->
+
+
+<!-- Facilities
+
+Source archetype facility
+Parameters (* indicates required):
+*name: Name, doesn't affect code just for naming convenience
+*outcommod: Commodity produced (needs some recipe, otherwise the source creates and provides whatever composition the next facility requests)
+outrecipe: Define what the outgoing commodity is made of
+inventory_size: How much extra of the commodity the facility can store while not sending to others, default is 1e+299 or basically infinite storage
+throughput: how much (in kg) of the commodity the facility outputs per timestep (month), default is 1e+299 or basically infinite throughput or throughput = demand
+-->
+<!-- Uranium mine is our source-->
+<facility>
+    <name>UraniumMine</name>
+    <config>
+        <Source>
+            <outcommod>u_ore</outcommod>
+            <outrecipe>nat_u</outrecipe>
+        </Source>
+    </config>
+</facility>
+
+<!-- Enrichment plant 
+
+Parameters (* indicates required):
+*feed_commod: commodity requested from Source
+*feed_recipe: recipe of the commodity requested from Source
+*product_commod: commodity produced by the facility
+*tails_commod: commodity produced by the facility
+max_feed_inventory: maximum kg of feed_commod the facility can store, default is 1e+299 or basically infinite storage
+tails_assay: U235 content of tails, default is the maximum of 0.003, can be set as low as 0
+initial_feed: kg of feed_commod the facility starts with, default is 0
+max_enrich: maximum enrichment of U235 in product_commod, default is 1, can be as low as 0 to basically disable the facility
+order_prefs: enable preference ordering for input material (order feed with highest U235 content first)
+swu_capacity: SWU capacity of the facility (kgSWU/timestep), default is 1e+299 or basically infinite capacity
+-->
+<facility>
+    <name>EnrichmentPlant</name>
+    <config>
+        <Enrichment>
+            <feedcommod>u_ore</feedcommod>
+            <feedrecipe>nat_u</feedrecipe>
+            <product_commod>fresh_fuel</product_commod>
+            <tails_commod>[string]</tails_commod>
+            <max_feed_inventory>[double]</max_feed_inventory>
+        </Enrichment>
+    </config>
+</facility>

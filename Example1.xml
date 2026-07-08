@@ -22,9 +22,12 @@ Create a simulation with some duration (months), start month, start year, and de
 <!--
 # Determine types of archetypes, aka types of facilities in the fuel cycle
 # Source: like a mine
-# Enrichment: tf you think it is
-# Reactor: fresh and used fuel into more used fuel with composition indicative of more burnup
-# Sink: like a waste repository -->
+# Enrichment: tf you think it is; ore in, fresh fuel out
+# Reactor: fresh and used fuel into more used fuel, all used fuel is identical in this example
+# Sink: like a waste repository; spent fuel in, nothing out 
+# Institutions: a group of facilities
+# Region: locations of facilities
+Region and Institution can allow or prevent trade between facilities or make some facilities preferred over others -->
 <archetypes>
     <spec>
         <lib>cycamore</lib>
@@ -42,16 +45,25 @@ Create a simulation with some duration (months), start month, start year, and de
         <lib>cycamore</lib>
         <name>Sink</name>
     </spec>
+    <spec>
+        <lib>agents</lib>
+        <name>NullRegion</name>
+    </spec>
+    <spec>
+        <lib>agents</lib>
+        <name>NullInst</name>
+    </spec>
 </archetypes>
 
 <!--
-# Commodities: complex system that allows facilities to trade with each other, make and accept bids, and use different suppliers 
-# Usually a commodity is a material produced by a facility, so we define our materials once so we don't have to repeatedly say what used fuel is made of
+Commodities: complex system that allows facilities to trade with each other, make and accept bids, and use different suppliers 
+Usually a commodity is a material produced by a facility, so we define our materials once so we don't have to repeatedly say what used fuel is made of
+Create commodities by declaring them in the facility creation code, recipes are declared separately 
 
-# Basis: mass or atom
-# id: nuclide in the form ZZAAA, or by name like U235 or U-235
+Basis: mass or atom
+id: nuclide in the form ZZAAA, or by name like U235 or U-235
 
-# natural uranium (from source into enrichment, these aren't CANDU or IPHWR) -->
+natural uranium (from source into enrichment, these aren't CANDU or IPHWR. If you want to use a nat_u HWR, you can also do that by changing the fuel recipe) -->
 <recipe>
     <name>nat_u</name>
     <basis>mass</basis>
@@ -131,7 +143,7 @@ Source archetype facility
 Parameters (* indicates required):
 *name: Name, doesn't affect code just for naming convenience
 *outcommod: Commodity produced (needs some recipe, otherwise the source creates and provides whatever composition the next facility requests)
-outrecipe: Define what the outgoing commodity is made of
+outrecipe: Define what the outgoing commodity is made of, default means the recipe will be whatever is requested
 inventory_size: How much extra of the commodity the facility can store while not sending to others, default is 1e+299 or basically infinite storage
 throughput: how much (in kg) of the commodity the facility outputs per timestep (month), default is 1e+299 or basically infinite throughput or throughput = demand
 -->
@@ -165,9 +177,65 @@ swu_capacity: SWU capacity of the facility (kgSWU/timestep), default is 1e+299 o
         <Enrichment>
             <feedcommod>u_ore</feedcommod>
             <feedrecipe>nat_u</feedrecipe>
-            <product_commod>fresh_fuel</product_commod>
-            <tails_commod>[string]</tails_commod>
-            <max_feed_inventory>[double]</max_feed_inventory>
+            <product_commod>fresh_uox</product_commod>
+            <tails_commod>tails</tails_commod>
+            <max_feed_inventory>1000000</max_feed_inventory>
         </Enrichment>
     </config>
+</facility>
+
+<!-- Reactor (this one is more complicated than the rest)
+Parameters (* indicates required): (more at https://fuelcycle.org/user/cycamoreagents.html#cycamore-reactor)
+*fuel_incommods: input fuel commodity, you can use multiple <val> blocks to have multiple fuel commodities
+*fuel_inrecipes: input fuel recipe, can have multiple
+fuel_prefs: preference for each type of fresh fuel
+*fuel_outcommods: output fuel commodity, can have multiple
+*fuel_outrecipes: output fuel recipe, can have multiple
+recipe_change_time: number of timesteps the reactor operates before changing fuel recipe
+cycle_time: number of timesteps the reactor operates between outages, default is 18
+refuel_time: length of refueling outages in timesteps, default is 1
+*assem_size: double, kg of fuel in a single assembly, range [1.0,100000.0]
+n_assem_core: assemblies in the core, default is 3, range [1,3]
+*n_assem_batch: assemblies replaced per refueling
+power_cap: int, electricity the reactor generates in MWe (I have no idea how this affects the simulation), default is 0, up to 2000 MWe
+n_assem_fresh: int, number of fresh fuel assemblies to keep on standby, default is 0
+n_assem_spent: int, number of spent fuel assemblies the reactor can hold onto before stopping operation, default is 1e9 (effectively unlimited)
+decom_transmute_all: boolean, if true, all fuel becomes spent when decommissioning, if false, half of the fuel becomes spent
+-->
+<facility>
+    <name>1178MWe ReactorPlant Unit 1</name>
+    <config>
+        <Reactor>
+            <fuel_incommods>fresh_uox</fuel_incommods>
+            <feul_inrecipes>fresh_uox</fuel_inrecipes>
+            <fuel_outcommods>spent_uox</fuel_outcommods>
+            <fuel_outrecipes>spent_uox</fuel_outrecipes>
+            <cyle_time>18</cycle_time>
+            <refuel_time>1</refuel_time>
+            <assem_size>33000</assem_size>
+            <n_assem_core>3</n_assem_core>
+            <n_assem_batch>1</n_assem_batch>
+            <power_cap>1178</power_cap>
+        </Reactor>
+    </config>
+</facility>
+
+<!-- Sink (this one doesn't require much)
+Accepts some amount of commodities with some throughput capacity and a total lifetime capacity
+Parameters (all optional):
+in_commod_prefs: commodities that the sink facility accepts
+recipe_name: recipe to use for material requests, default is empty which means accept everything
+max_inv_size: total maximum inventory size, default is 1e+299 or basically infinite
+capacity: total maximum throughput capacity, default is 1e+299 or basically infinite
+-->
+<facility>
+  <name>NuclearRepository</name>
+  <config>
+    <Sink>
+      <in_commods>
+        <val>spent_uox</val>
+        <val>tails</val>
+      </in_commods>
+    </Sink>
+  </config>
 </facility>

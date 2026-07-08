@@ -141,7 +141,6 @@ throughput: how much (in kg) of the commodity the facility outputs per timestep 
     <config>
         <Source>
             <outcommod>u_ore</outcommod>
-            <outrecipe>nat_u</outrecipe>
         </Source>
     </config>
 </facility>

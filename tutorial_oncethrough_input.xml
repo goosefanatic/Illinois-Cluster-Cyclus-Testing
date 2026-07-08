@@ -239,3 +239,60 @@ capacity: total maximum throughput capacity, default is 1e+299 or basically infi
     </Sink>
   </config>
 </facility>
+
+<!-- Instututions
+Parameters:
+*name: name for the institution
+lifetime: number of timesteps the institution is active
+config: archetype-specific configuration for the institution
+initialfacilitylist: list of facilities operating at the start of the simulation under the institution, has the parameters prototype and number
+prototype: name of facility defined elsewhere in the input
+number: number of that favility at the start of the simulation
+-->
+
+
+<!-- Regions 
+Parameters:
+name: name of region
+config: region archetype  (NullRegion has no inputs so those are empty here)
+RegionArchetype: name of region archetype we want to use in a simulation or for a region
+-->
+<region>
+    <name>USA</name>
+    <config>
+        <NullRegion/>
+    </config>
+    <institution>
+        <initialfacilitylist>
+            <entry>
+                <prototype>UraniumMine</prototype>
+                <number>1</number>
+            </entry>
+            <entry>
+                <prototype>EnrichmentPlant</prototype>
+                <number>1</number>
+            </entry>
+            <entry>
+                <prototype>NuclearRepository</prototype>
+                <number>1</number>
+            </entry>
+        </initialfacilitylist>
+        <name>United States Nuclear</name>
+        <config>
+            <NullInst/>
+        </config>
+    </institution>
+
+    <institution>
+        <initialfacilitylist>
+            <entry>
+                <prototype>1178MWe ReactorPlant Unit 1</prototype>
+                <number>1</number>
+            </entry>
+        </initialfacilitylist>
+        <name>Reactor Utility</name>
+        <config>
+        <NullInst/>
+        </config>
+    </institution>
+</region>

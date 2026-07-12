@@ -17,7 +17,7 @@ Create a simulation with some duration (months), start month, start year, and de
         <startyear>2018</startmonth>
         <decay>never</decay>
     </control>
-</simulation>
+
 
 <!--
 # Determine types of archetypes, aka types of facilities in the fuel cycle
@@ -28,32 +28,32 @@ Create a simulation with some duration (months), start month, start year, and de
 # Institutions: a group of facilities
 # Region: locations of facilities
 Region and Institution can allow or prevent trade between facilities or make some facilities preferred over others -->
-<archetypes>
-    <spec>
-        <lib>cycamore</lib>
-        <name>Source</name>
-    </spec>
-    <spec>
-        <lib>cycamore</lib>
-        <name>Enrichment</name>
-    </spec>
-    <spec>
-        <lib>cycamore</lib>
-        <name>Reactor</name>
-    </spec>
-    <spec>
-        <lib>cycamore</lib>
-        <name>Sink</name>
-    </spec>
-    <spec>
-        <lib>agents</lib>
-        <name>NullRegion</name>
-    </spec>
-    <spec>
-        <lib>agents</lib>
-        <name>NullInst</name>
-    </spec>
-</archetypes>
+    <archetypes>
+        <spec>
+            <lib>cycamore</lib>
+            <name>Source</name>
+        </spec>
+        <spec>
+            <lib>cycamore</lib>
+            <name>Enrichment</name>
+        </spec>
+        <spec>
+            <lib>cycamore</lib>
+            <name>Reactor</name>
+        </spec>
+        <spec>
+            <lib>cycamore</lib>
+            <name>Sink</name>
+        </spec>
+        <spec>
+            <lib>agents</lib>
+            <name>NullRegion</name>
+        </spec>
+        <spec>
+            <lib>agents</lib>
+            <name>NullInst</name>
+        </spec>
+    </archetypes>
 
 <!--
 Commodities: complex system that allows facilities to trade with each other, make and accept bids, and use different suppliers 
@@ -64,54 +64,54 @@ Basis: mass or atom
 id: nuclide in the form ZZAAA, or by name like U235 or U-235
 
 natural uranium (from source into enrichment, these aren't CANDU or IPHWR. If you want to use a nat_u HWR, you can also do that by changing the fuel recipe) -->
-<recipe>
-    <name>nat_u</name>
-    <basis>mass</basis>
-    <nuclide>
-        <id>92235</id>
-        <comp>0.00711</comp>
-    </nuclide>
-    <nuclide>
-        <id>92238</id>
-        <comp>0.99289</comp>
-    </nuclide>
-</recipe>
+    <recipe>
+        <name>nat_u</name>
+        <basis>mass</basis>
+        <nuclide>
+            <id>92235</id>
+            <comp>0.00711</comp>
+        </nuclide>
+        <nuclide>
+            <id>92238</id>
+            <comp>0.99289</comp>
+        </nuclide>
+    </recipe>
 
 <!-- fresh fuel, we aren't reprocessing in this example so it's all just UOX instead of MOX -->
-<recipe>
-    <name>fresh_uox</name>
-    <basis>mass</basis>
-    <nuclide>
-        <id>92235</id>
-        <comp>0.04</comp>
-    </nuclide>
-    <nuclide>
-        <id>92238</id>
-        <comp>0.96</comp>
-    </nuclide>
-</recipe>
+    <recipe>
+        <name>fresh_uox</name>
+        <basis>mass</basis>
+        <nuclide>
+            <id>92235</id>
+            <comp>0.04</comp>
+        </nuclide>
+        <nuclide>
+            <id>92238</id>
+            <comp>0.96</comp>
+        </nuclide>
+    </recipe>
 
 <!-- used fuel, only fission product that we're modeling is 137Cs because this is a simple model. We're also not modeling higher plutonia above 239 because idfc -->
-<recipe>
-    <name>spent_uox</name>
-    <basis>mass</basis>
-    <nuclide>
-        <id>92235</id>
-        <comp>0.011</comp>
-    </nuclide>
-    <nuclide>
-        <id>92238</id>
-        <comp>0.94</comp>
-    </nuclide>
-    <nuclide>
-        <id>94239</id>
-        <comp>0.009</comp>
-    </nuclide>
-    <nuclide>
-        <id>55137</id>
-        <comp>0.04</comp>
-    </nuclide>
-</recipe>
+    <recipe>
+        <name>spent_uox</name>
+        <basis>mass</basis>
+        <nuclide>
+            <id>92235</id>
+            <comp>0.011</comp>
+        </nuclide>
+        <nuclide>
+            <id>92238</id>
+            <comp>0.94</comp>
+        </nuclide>
+        <nuclide>
+            <id>94239</id>
+            <comp>0.009</comp>
+        </nuclide>
+        <nuclide>
+            <id>55137</id>
+            <comp>0.04</comp>
+        </nuclide>
+    </recipe>
 
 <!-- extra recipe code, copy and paste this to add more materials 
 <recipe>
@@ -148,14 +148,14 @@ inventory_size: How much extra of the commodity the facility can store while not
 throughput: how much (in kg) of the commodity the facility outputs per timestep (month), default is 1e+299 or basically infinite throughput or throughput = demand
 -->
 <!-- Uranium mine is our source-->
-<facility>
-    <name>UraniumMine</name>
-    <config>
-        <Source>
-            <outcommod>u_ore</outcommod>
-        </Source>
-    </config>
-</facility>
+    <facility>
+        <name>UraniumMine</name>
+        <config>
+            <Source>
+                <outcommod>u_ore</outcommod>
+            </Source>
+        </config>
+    </facility>
 
 <!-- Enrichment plant 
 
@@ -171,18 +171,18 @@ max_enrich: maximum enrichment of U235 in product_commod, default is 1, can be a
 order_prefs: enable preference ordering for input material (order feed with highest U235 content first)
 swu_capacity: SWU capacity of the facility (kgSWU/timestep), default is 1e+299 or basically infinite capacity
 -->
-<facility>
-    <name>EnrichmentPlant</name>
-    <config>
-        <Enrichment>
-            <feedcommod>u_ore</feedcommod>
-            <feedrecipe>nat_u</feedrecipe>
-            <product_commod>fresh_uox</product_commod>
-            <tails_commod>tails</tails_commod>
-            <max_feed_inventory>1000000</max_feed_inventory>
-        </Enrichment>
-    </config>
-</facility>
+    <facility>
+        <name>EnrichmentPlant</name>
+        <config>
+            <Enrichment>
+                <feedcommod>u_ore</feedcommod>
+                <feedrecipe>nat_u</feedrecipe>
+                <product_commod>fresh_uox</product_commod>
+                <tails_commod>tails</tails_commod>
+                <max_feed_inventory>1000000</max_feed_inventory>
+            </Enrichment>
+        </config>
+    </facility>
 
 <!-- Reactor (this one is more complicated than the rest)
 Parameters (* indicates required): (more at https://fuelcycle.org/user/cycamoreagents.html#cycamore-reactor)
@@ -202,23 +202,23 @@ n_assem_fresh: int, number of fresh fuel assemblies to keep on standby, default 
 n_assem_spent: int, number of spent fuel assemblies the reactor can hold onto before stopping operation, default is 1e9 (effectively unlimited)
 decom_transmute_all: boolean, if true, all fuel becomes spent when decommissioning, if false, half of the fuel becomes spent
 -->
-<facility>
-    <name>1178MWe ReactorPlant Unit 1</name>
-    <config>
-        <Reactor>
-            <fuel_incommods>fresh_uox</fuel_incommods>
-            <feul_inrecipes>fresh_uox</fuel_inrecipes>
-            <fuel_outcommods>spent_uox</fuel_outcommods>
-            <fuel_outrecipes>spent_uox</fuel_outrecipes>
-            <cyle_time>18</cycle_time>
-            <refuel_time>1</refuel_time>
-            <assem_size>33000</assem_size>
-            <n_assem_core>3</n_assem_core>
-            <n_assem_batch>1</n_assem_batch>
-            <power_cap>1178</power_cap>
-        </Reactor>
-    </config>
-</facility>
+    <facility>
+        <name>1178MWe ReactorPlant Unit 1</name>
+        <config>
+            <Reactor>
+                <fuel_incommods>fresh_uox</fuel_incommods>
+                <feul_inrecipes>fresh_uox</fuel_inrecipes>
+                <fuel_outcommods>spent_uox</fuel_outcommods>
+                <fuel_outrecipes>spent_uox</fuel_outrecipes>
+                <cyle_time>18</cycle_time>
+                <refuel_time>1</refuel_time>
+                <assem_size>33000</assem_size>
+                <n_assem_core>3</n_assem_core>
+                <n_assem_batch>1</n_assem_batch>
+                <power_cap>1178</power_cap>
+            </Reactor>
+        </config>
+    </facility>
 
 <!-- Sink (this one doesn't require much)
 Accepts some amount of commodities with some throughput capacity and a total lifetime capacity
@@ -228,17 +228,17 @@ recipe_name: recipe to use for material requests, default is empty which means a
 max_inv_size: total maximum inventory size, default is 1e+299 or basically infinite
 capacity: total maximum throughput capacity, default is 1e+299 or basically infinite
 -->
-<facility>
-  <name>NuclearRepository</name>
-  <config>
-    <Sink>
-      <in_commods>
-        <val>spent_uox</val>
-        <val>tails</val>
-      </in_commods>
-    </Sink>
-  </config>
-</facility>
+    <facility>
+    <name>NuclearRepository</name>
+    <config>
+        <Sink>
+        <in_commods>
+            <val>spent_uox</val>
+            <val>tails</val>
+        </in_commods>
+        </Sink>
+    </config>
+    </facility>
 
 <!-- Instututions
 Parameters:
@@ -257,42 +257,43 @@ name: name of region
 config: region archetype  (NullRegion has no inputs so those are empty here)
 RegionArchetype: name of region archetype we want to use in a simulation or for a region
 -->
-<region>
-    <name>USA</name>
-    <config>
-        <NullRegion/>
-    </config>
-    <institution>
-        <initialfacilitylist>
-            <entry>
-                <prototype>UraniumMine</prototype>
-                <number>1</number>
-            </entry>
-            <entry>
-                <prototype>EnrichmentPlant</prototype>
-                <number>1</number>
-            </entry>
-            <entry>
-                <prototype>NuclearRepository</prototype>
-                <number>1</number>
-            </entry>
-        </initialfacilitylist>
-        <name>United States Nuclear</name>
+    <region>
+        <name>USA</name>
         <config>
-            <NullInst/>
+            <NullRegion/>
         </config>
-    </institution>
+        <institution>
+            <initialfacilitylist>
+                <entry>
+                    <prototype>UraniumMine</prototype>
+                    <number>1</number>
+                </entry>
+                <entry>
+                    <prototype>EnrichmentPlant</prototype>
+                    <number>1</number>
+                </entry>
+                <entry>
+                    <prototype>NuclearRepository</prototype>
+                    <number>1</number>
+                </entry>
+            </initialfacilitylist>
+            <name>United States Nuclear</name>
+            <config>
+                <NullInst/>
+            </config>
+        </institution>
 
-    <institution>
-        <initialfacilitylist>
-            <entry>
-                <prototype>1178MWe ReactorPlant Unit 1</prototype>
-                <number>1</number>
-            </entry>
-        </initialfacilitylist>
-        <name>Reactor Utility</name>
-        <config>
-        <NullInst/>
-        </config>
-    </institution>
-</region>
+        <institution>
+            <initialfacilitylist>
+                <entry>
+                    <prototype>1178MWe ReactorPlant Unit 1</prototype>
+                    <number>1</number>
+                </entry>
+            </initialfacilitylist>
+            <name>Reactor Utility</name>
+            <config>
+            <NullInst/>
+            </config>
+        </institution>
+    </region>
+</simulation>

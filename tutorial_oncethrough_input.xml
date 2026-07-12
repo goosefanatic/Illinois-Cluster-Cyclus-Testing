@@ -14,7 +14,7 @@ Create a simulation with some duration (months), start month, start year, and de
     <control>
         <duration>720</duration>
         <startmonth>1</startmonth>
-        <startyear>2018</startmonth>
+        <startyear>2018</startyear>
         <decay>never</decay>
     </control>
 

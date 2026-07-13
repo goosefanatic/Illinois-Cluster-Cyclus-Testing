@@ -1,7 +1,14 @@
+
 <simulation>
+    <control>
+        <duration>720</duration>
+        <startmonth>1</startmonth>
+        <startyear>2018</startyear>
+        <decay>never</decay>
+    </control>
 
 
-<!-- Archetypes -->
+
     <archetypes>
         <spec>
             <lib>cycamore</lib>
@@ -19,7 +26,14 @@
             <lib>cycamore</lib>
             <name>Sink</name>
         </spec>
-        <!-- added separations and fuel fabrication facilities -->
+        <spec>
+            <lib>agents</lib>
+            <name>NullRegion</name>
+        </spec>
+        <spec>
+            <lib>agents</lib>
+            <name>NullInst</name>
+        </spec>
         <spec>
             <lib>cycamore</lib>
             <name>FuelFab</name>
@@ -36,10 +50,16 @@
             <lib>agents</lib>
             <name>NullInst</name>
         </spec>
+        <!-- add the DeployInst -->
+        <spec>
+            <lib>cycamore</lib>
+            <name>DeployInst</name>
+        </spec>
+        
     </archetypes>
 
 
-<!-- Recipe book -->
+
     <recipe>
         <name>nat_u</name>
         <basis>mass</basis>
@@ -87,7 +107,6 @@
         </nuclide>
     </recipe>
 
-    <!-- added used MOX recipe-->
     <recipe>
         <name>used_mox</name>
         <basis>mass</basis>
@@ -132,7 +151,6 @@
         <name>spent_uox</name>
         <solution_priority>1.0</solution_priority>
     </commodity>
-    <!-- add reprocessing-related commodities -->
     <commodity>
         <name>fresh_mox</name>
         <solution_priority>1.0</solution_priority>
@@ -151,7 +169,6 @@
     </commodity>
 
 
-
 <!-- Facilities -->
     <facility>
         <name>UraniumMine</name>
@@ -161,6 +178,8 @@
             </Source>
         </config>
     </facility>
+
+
 
     <facility>
         <name>EnrichmentPlant</name>
@@ -174,6 +193,9 @@
             </Enrichment>
         </config>
     </facility>
+
+
+
 
     <facility>
         <name>1178MWe ReactorPlant Unit 1</name>
@@ -212,8 +234,8 @@
         </config>
     </facility>
 
-    <!-- Reactor that can use MOX fuel (using UOX recipe as MOX recipe for simplicity)
-    The order of <vals> blocks matters because the first block for each parameter is tied to each other, same for the second, etc.. In this case, fresh mox has recipe fresh_uox, fuel pref 2, outcommod used_mox-->
+
+
     <facility>
         <name>EPR-1000</name>
         <config>
@@ -261,7 +283,6 @@
         </config>
     </facility>
 
-    <!-- added separations facility -->
     <facility>
         <name>SeparationsFacility</name>
         <config>
@@ -296,7 +317,7 @@
         </config>
     </facility>
 
-    <!-- added fuel fabrication facility (remember, the mass of commodities is in units of kg NOT tons) -->
+
     <facility>
         <name>FuelFab</name>
         <config>
@@ -318,7 +339,10 @@
     </facility>
 
 
-<!-- Region block -->
+
+    
+
+
     <region>
         <name>USA</name>
         <config>
@@ -338,6 +362,14 @@
                     <prototype>NuclearRepository</prototype>
                     <number>1</number>
                 </entry>
+                <entry>
+                    <prototype>FuelFab</prototype>
+                    <number>1</number>
+                </entry>
+                <entry>
+                    <prototype>SeparationsFacility</prototype>
+                    <number>1</number>
+                </entry>
             </initialfacilitylist>
             <name>United States Nuclear</name>
             <config>
@@ -352,7 +384,7 @@
                     <number>1</number>
                 </entry>
                 <entry>
-                    <prototype>1000MWe MOX Lightwater_1</prototype>
+                    <prototype>1000MWe Lightwater_1</prototype>
                     <number>1</number>
                 </entry>
                 <entry>
@@ -365,6 +397,37 @@
                 <NullInst/>
             </config>
         </institution>
-    </region>
 
+    <!-- Declare the institution that can deploy facilities (needs to be declared differently than NullInst) 
+    DeployInst parameters:
+    prototypes: Ordered list of prototypes to build
+    build_times: Time step on which to deploy agents given in prototype list
+    n_build: Number of each prototype given in prototype list to build -->
+
+    <institution>
+        <name>Facility Builder</name>
+        <config>
+            <DeployInst>
+                <prototypes>
+                    <val> UraniumMine </val>
+                    <val> FuelFab </val>
+                    <val> 1178MWe ReactorPlant Unit 1 </val>
+                    <val> 1000MMWe Lightwater 1 </val>
+                </prototypes>
+                <build_times>
+                    <val> 1 </val>
+                    <val> 1 </val>
+                    <val> 2 </val>
+                    <val> 3 </val>
+                </build_times>
+                <n_build>
+                    <val> 1 </val>
+                    <val> 1 </val>
+                    <val> 1 </val>
+                    <val> 1 </val>
+                </n_build>
+            </DeployInst>
+        </config>
+    </institution>
+    </region>
 </simulation>

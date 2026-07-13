@@ -1,4 +1,4 @@
 # congenial-waddle
 Cyclus example codes for testing on cluster
 
-Example 1 is written with the intent of being a blueprint and reference for other Cyclus programs
+Every time a new component is added, it should have comments explaining what it does and what it needs in the code

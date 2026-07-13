@@ -136,6 +136,23 @@ natural uranium (from source into enrichment, these aren't CANDU or IPHWR. If yo
 </recipe>
 -->
 
+    <commodity>
+        <name>u_ore</name>
+        <solution_priority>1.0</solution_priority>
+    </commodity>
+    <commodity>
+        <name>fresh_uox</name>
+        <solution_priority>1.0</solution_priority>
+    </commodity>
+    <commodity>
+        <name>tails</name>
+        <solution_priority>1.0</solution_priority>
+    </commodity>
+    <commodity>
+        <name>spent_uox</name>
+        <solution_priority>1.0</solution_priority>
+    </commodity>
+
 
 <!-- Facilities
 
@@ -292,7 +309,7 @@ RegionArchetype: name of region archetype we want to use in a simulation or for 
             </initialfacilitylist>
             <name>Reactor Utility</name>
             <config>
-            <NullInst/>
+                <NullInst/>
             </config>
         </institution>
     </region>

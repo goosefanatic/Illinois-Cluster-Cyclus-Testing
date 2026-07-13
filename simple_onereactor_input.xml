@@ -218,6 +218,7 @@ power_cap: int, electricity the reactor generates in MWe (I have no idea how thi
 n_assem_fresh: int, number of fresh fuel assemblies to keep on standby, default is 0
 n_assem_spent: int, number of spent fuel assemblies the reactor can hold onto before stopping operation, default is 1e9 (effectively unlimited)
 decom_transmute_all: boolean, if true, all fuel becomes spent when decommissioning, if false, half of the fuel becomes spent
+lifetime: number of timesteps a reactor operates before decommissioning
 -->
     <facility>
         <name>1178MWe ReactorPlant Unit 1</name>

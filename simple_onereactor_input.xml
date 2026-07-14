@@ -192,8 +192,8 @@ swu_capacity: SWU capacity of the facility (kgSWU/timestep), default is 1e+299 o
         <name>EnrichmentPlant</name>
         <config>
             <Enrichment>
-                <feedcommod>u_ore</feedcommod>
-                <feedrecipe>nat_u</feedrecipe>
+                <feed_commod>u_ore</feed_commod>
+                <feed_recipe>nat_u</feed_recipe>
                 <product_commod>fresh_uox</product_commod>
                 <tails_commod>tails</tails_commod>
                 <max_feed_inventory>1000000</max_feed_inventory>

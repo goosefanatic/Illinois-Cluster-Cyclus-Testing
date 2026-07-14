@@ -185,8 +185,8 @@
         <name>EnrichmentPlant</name>
         <config>
             <Enrichment>
-                <feedcommod>u_ore</feedcommod>
-                <feedrecipe>nat_u</feedrecipe>
+                <feed_commod>u_ore</feed_commod>
+                <feed_recipe>nat_u</feed_recipe>
                 <product_commod>fresh_uox</product_commod>
                 <tails_commod>tails</tails_commod>
                 <max_feed_inventory>1000000</max_feed_inventory>
@@ -306,6 +306,7 @@
                             <buf_size>5e+3</buf_size>
                             <efficiencies>
                                 <item>
+                                <!-- 94000 means plutonium agnostic of isotope, only valid in chemistry applications like reprocessing -->
                                     <comp>94000</comp>
                                     <eff>0.99</eff>
                                 </item>

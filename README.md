@@ -6,6 +6,7 @@ Every time a new component is added, it should have comments explaining what it 
 
 # Running Cyclus code on the cluster:
 
+## NOTE: As of current testing, the US Inventory model does NOT work on the cluster. It requires compiling Cyclus from source, which requires the installation of packages and systems that require `sudo` access, which I and most others do not have
 
 ## Put your code on the cluster
 Install FileZilla on your computer to assist with sending files to and recieving files from the cluster

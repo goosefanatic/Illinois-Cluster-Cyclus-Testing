@@ -1,0 +1,12 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/workspaces/congenial-waddle/cyclus/src/cram-linux-gnu.s
+
+/workspaces/congenial-waddle/cyclus/src/decay-linux-gnu.s
+

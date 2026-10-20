@@ -1,0 +1,99 @@
+<!-- Start the simulation,  -->
+
+<?xml-model href="../schema/cyclus.rng"
+             type="application/xml"
+             schematypens="http://relaxng.org/ns/structure/1.0"?>
+
+
+<simulation>
+  <control>
+    <duration>500</duration>
+    <startmonth>1</startmonth>
+    <startyear>2024</startyear>
+    <!--<dt>2628000</dt>-->
+    <explicit_inventory>1</explicit_inventory> <!-- Significantly extrends simulation time according to docs, may not be necessary? -->
+  </control>
+
+  <archetypes>
+    <spec>
+      <lib>einstein</lib>
+      <name>us_inventory</name>
+    </spec>
+    <spec>
+      <lib>einstein</lib>
+      <name>ads</name>
+    </spec>
+    <spec>
+      <lib>cycamore</lib>
+      <name>Sink</name>
+    </spec>
+    <spec>
+      <lib>agents</lib>
+      <name>NullRegion</name>
+    </spec>
+    <spec>
+      <lib>agents</lib>
+      <name>NullInst</name>
+    </spec>
+  </archetypes>
+
+
+<facility>
+  <name>Byron_Unit_1<name>
+  <config>
+  </config>
+</facility>
+
+
+
+  <facility>
+    <name>us_inventory</name>
+    <config>
+      <us_inventory>
+        <outcommod>spent_fuel</outcommod>
+        <data_dir>./assembly_data/</data_dir>
+      </us_inventory>
+    </config>
+  </facility>
+
+  <facility>
+    <name>Sink</name>
+    <config>
+      <Sink>
+        <in_commods>
+          <val>spent_fuel</val>
+        </in_commods>
+        <capacity>10000</capacity>
+      </Sink>
+    </config>
+  </facility>
+
+  <region>
+    <name>SingleRegion</name>
+    <config><NullRegion/></config>
+    <institution>
+      <name>SingleInstitution</name>
+      <initialfacilitylist>
+        <entry>
+          <prototype>us_inventory</prototype>
+          <number>1</number>
+        </entry>
+        <entry>
+          <prototype>Sink</prototype>
+          <number>1</number>
+        </entry>
+      </initialfacilitylist>
+      <config><NullInst/></config>
+    </institution>
+  </region>
+
+  <recipe>
+    <name>commod_recipe</name>
+    <basis>mass</basis>
+    <nuclide>
+      <id>010010000</id>
+      <comp>1</comp>
+    </nuclide>
+  </recipe>
+
+</simulation>

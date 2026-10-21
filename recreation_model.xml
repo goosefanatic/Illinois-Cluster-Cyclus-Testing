@@ -1,4 +1,7 @@
-<!-- Start the simulation,  -->
+<!-- 
+I don't think the US inventory and ADS system actually need a reactor plant to exist, but they do need a repository.
+Inventory > Separations > ADS > Sink or Separations again
+  -->
 
 <?xml-model href="../schema/cyclus.rng"
              type="application/xml"
@@ -24,76 +27,310 @@
       <name>ads</name>
     </spec>
     <spec>
-      <lib>cycamore</lib>
-      <name>Sink</name>
-    </spec>
-    <spec>
-      <lib>agents</lib>
-      <name>NullRegion</name>
-    </spec>
-    <spec>
-      <lib>agents</lib>
-      <name>NullInst</name>
-    </spec>
+          <lib>cycamore</lib>
+          <name>Source</name>
+      </spec>
+      <spec>
+          <lib>cycamore</lib>
+          <name>Enrichment</name>
+      </spec>
+      <spec>
+          <lib>cycamore</lib>
+          <name>Reactor</name>
+      </spec>
+      <spec>
+          <lib>cycamore</lib>
+          <name>Sink</name>
+      </spec>
+      <spec>
+          <lib>agents</lib>
+          <name>NullRegion</name>
+      </spec>
+      <spec>
+          <lib>agents</lib>
+          <name>NullInst</name>
+      </spec>
+      <spec>
+          <lib>cycamore</lib>
+          <name>FuelFab</name>
+      </spec>
+      <spec>
+          <lib>cycamore</lib>
+          <name>Separations</name>
+      </spec>
+      <spec>
+          <lib>agents</lib>
+          <name>NullRegion</name>
+      </spec>
+      <spec>
+          <lib>agents</lib>
+          <name>NullInst</name>
+      </spec>
+      <!-- add the DeployInst -->
+      <spec>
+          <lib>cycamore</lib>
+          <name>DeployInst</name>
+      </spec>
   </archetypes>
 
 
-<facility>
-  <name>Byron_Unit_1<name>
-  <config>
-  </config>
-</facility>
+
+    <recipe>
+        <name>nat_u</name>
+        <basis>mass</basis>
+        <nuclide>
+            <id>92235</id>
+            <comp>0.00711</comp>
+        </nuclide>
+        <nuclide>
+            <id>92238</id>
+            <comp>0.99289</comp>
+        </nuclide>
+    </recipe>
+
+    <recipe>
+        <name>fresh_uox</name>
+        <basis>mass</basis>
+        <nuclide>
+            <id>92235</id>
+            <comp>0.04</comp>
+        </nuclide>
+        <nuclide>
+            <id>92238</id>
+            <comp>0.96</comp>
+        </nuclide>
+    </recipe>
+
+
+
+  <commodity>
+      <name>u_ore</name>
+      <solution_priority>1.0</solution_priority>
+  </commodity>
+  <commodity>
+      <name>fresh_uox</name>
+      <solution_priority>1.0</solution_priority>
+  </commodity>
+  <commodity>
+      <name>tails</name>
+      <solution_priority>1.0</solution_priority>
+  </commodity>
+  <commodity>
+      <name>spent_uox</name>
+      <solution_priority>1.0</solution_priority>
+  </commodity>
+  <commodity>
+    <name>ads_burnt_fuel</name>
+    <solution_priority>1.0</solution_priority>
+  </commodity>
+
+
+
+<!-- Facilities --><!-- MUCH OF WHATS INSIDE THIS COMMENT MIGHT NOT BE NECESSARY TO REPLICATE SAMAR'S RESULTS
+    <facility>
+        <name>UraniumMine</name>
+        <config>
+            <Source>
+                <outcommod>u_ore</outcommod>
+            </Source>
+        </config>
+    </facility>
+
+
+
+    <facility>
+        <name>EnrichmentPlant</name>
+        <config>
+            <Enrichment>
+                <feed_commod>u_ore</feed_commod>
+                <feed_recipe>nat_u</feed_recipe>
+                <product_commod>fresh_uox</product_commod>
+                <tails_commod>tails</tails_commod>
+                <max_feed_inventory>1000000</max_feed_inventory>
+            </Enrichment>
+        </config>
+    </facility>
 
 
 
   <facility>
-    <name>us_inventory</name>
+    <name>Byron_Unit_1<name>
     <config>
-      <us_inventory>
-        <outcommod>spent_fuel</outcommod>
-        <data_dir>./assembly_data/</data_dir>
-      </us_inventory>
+        <Reactor>
+            <fuel_incommods> <val>fresh_uox</val> </fuel_incommods>
+            <fuel_inrecipes> <val>fresh_uox</val> </fuel_inrecipes>
+            <fuel_outcommods> <val>spent_uox</val> </fuel_outcommods>  somehow need to incorporate US inventory here
+            <fuel_outrecipes> <val>spent_uox</val> </fuel_outrecipes>
+            <cycle_time>18</cycle_time>
+            <refuel_time>1</refuel_time>
+            <assem_size>33000</assem_size>
+            <n_assem_core>3</n_assem_core>
+            <n_assem_batch>1</n_assem_batch>
+            <power_cap>1178</power_cap>
+        </Reactor>
     </config>
   </facility>
+-->
 
-  <facility>
-    <name>Sink</name>
-    <config>
-      <Sink>
-        <in_commods>
-          <val>spent_fuel</val>
-        </in_commods>
-        <capacity>10000</capacity>
-      </Sink>
-    </config>
-  </facility>
+
+    <facility>
+        <name>us_inventory</name>
+        <config>
+        <us_inventory>
+            <selection_policy>highest_minor_actinide</selection_policy>
+            <outcommod>spent_fuel</outcommod>
+            <data_dir>./assembly_data/</data_dir>
+        </us_inventory>
+        </config>
+    </facility>
+
+
+    <facility>
+        <name>Final_Disposal</name>
+        <config>
+        <Sink>
+            <in_commods>
+            <val>separated_waste</val>
+            </in_commods>
+            <capacity>10000</capacity>
+        </Sink>
+        </config>
+    </facility>
+
+    <facility>
+        <name>NATURE_Reactor</name>
+        <config>
+        <ads>
+            <in_commods>
+            <val>mixed_actinides</val> 
+            </in_commods>
+            <outcommod>
+            <val>ads_burnt_fuel</val> <!-- should output interpolated STANDARDS to Serpent files -->
+            </outcommod>
+        </ads>
+        </config>
+    </facility>
+
+    <!-- Mix actinides to send to ADS -->
+    <facility>
+        <name>Mixer_facility</name>
+        <config>
+            <Mixer>
+                <in_commods>
+                    <val>separated_actinides</val>
+                </in_commods>
+                <outcommod>
+                    <val>mixed_actinides</val>
+                </outcommod>
+            </Mixer>
+        <config>
+    </facility>
+
+
+    <facility>
+        <name>SeparationsFacility</name>
+        <config>
+            <Separations>
+                <feed_commods> 
+                    <val>ads_burnt_fuel</val> 
+                    <val>spent_fuel</val> 
+                </feed_commods>
+                <feed_commod_prefs> 
+                    <vals>1.0</vals> 
+                    <vals>1.0</vals> 
+                </feed_commod_prefs>
+                <feedbuf_size>1000e+3</feedbuf_size>
+                <throughput>80e+3</throughput>
+                <leftover_commod>separated_waste</leftover_commod>
+                <leftoverbuf_size>1000e+3</leftoverbuf_size>
+                <streams>
+                    <item>
+                        <commod>separated_actinides</commod>
+                        <info>
+                            <buf_size>5e+3</buf_size>
+                            <efficiencies>
+                                <item>
+                                    <comp>94000</comp>
+                                    <eff>0.99</eff>
+                                </item>
+                                <item>
+                                    <comp>93000</comp>
+                                    <eff>0.99</eff>
+                                </item>
+                                <item>
+                                    <comp>95000</comp>
+                                    <eff>0.99</eff>
+                                </item>
+                                <item>
+                                    <comp>96000</comp>
+                                    <eff>0.99</eff>
+                                </item>
+                            </efficiencies>
+                        </info>
+                    </item>
+                </streams>
+            </Separations>
+        </config>
+    </facility>
+
+
 
   <region>
-    <name>SingleRegion</name>
-    <config><NullRegion/></config>
+    <name>USA</name>
+    <config>
+        <NullRegion/>
+    </config>
     <institution>
-      <name>SingleInstitution</name>
-      <initialfacilitylist>
-        <entry>
-          <prototype>us_inventory</prototype>
-          <number>1</number>
-        </entry>
-        <entry>
-          <prototype>Sink</prototype>
-          <number>1</number>
-        </entry>
-      </initialfacilitylist>
-      <config><NullInst/></config>
+        <initialfacilitylist>
+            <!--<entry>
+                <prototype>UraniumMine</prototype>
+                <number>1</number>
+            </entry>
+            <entry>
+                <prototype>EnrichmentPlant</prototype>
+                <number>1</number>
+            </entry> -->
+            <entry>
+                <prototype>Final_Disposal</prototype>
+                <number>1</number>
+            </entry>
+            <entry>
+                <prototype>us_inventory</prototype>
+                <number>1</number>
+            </entry>
+            <entry>
+                <prototype>NATURE_Reactor</prototype>
+                <number>1</number>
+            </entry>
+            <entry>
+                <prototype>SeparationsFacility</prototype>
+                <number>1</number>
+            </entry>
+            <entry>
+                <prototype>Mixer_facility</prototype>
+                <number>1</number>
+            </entry>
+        </initialfacilitylist>
+        <name>United States Nuclear</name>
+        <config>
+            <NullInst/>
+        </config>
     </institution>
-  </region>
 
-  <recipe>
-    <name>commod_recipe</name>
-    <basis>mass</basis>
-    <nuclide>
-      <id>010010000</id>
-      <comp>1</comp>
-    </nuclide>
-  </recipe>
+    <!--
+    <institution>
+        <initialfacilitylist>
+            <entry>
+                <prototype>Byron_Unit_1</prototype>
+                <number>1</number>
+            </entry>
+        </initialfacilitylist>
+        <name>Reactor Utility</name>
+        <config>
+            <NullInst/>
+        </config>
+    </institution> -->
+
+  </region>
 
 </simulation>

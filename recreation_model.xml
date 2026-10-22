@@ -126,7 +126,7 @@ Inventory > Separations > ADS > Sink or Separations again
 
 
 
-<!-- Facilities --><!-- MUCH OF WHATS INSIDE THIS COMMENT MIGHT NOT BE NECESSARY TO REPLICATE SAMAR'S RESULTS
+<!-- Facilities --><!-- CODE INSIDE THIS COMMENT MIGHT NOT BE NECESSARY TO REPLICATE SAMAR'S RESULTS
     <facility>
         <name>UraniumMine</name>
         <config>
@@ -199,12 +199,13 @@ Inventory > Separations > ADS > Sink or Separations again
 
     <facility>
         <name>NATURE_Reactor</name>
-        <config>
+        <config> <!-- Apparently dt is important here, but I can't tell based on Samar's thesis how to rectify that -->
         <ads>
             <in_commods>
             <val>mixed_actinides</val> 
             </in_commods>
             <outcommod>
+            <case_dir>./nature_explicit_no_source/nature_explicit_nosource_refuel/plot_data_06_actinide_masses.txt</case_dir> <!-- We want this one because we aren't continuously reprocessing the fluid in this model  -->
             <val>ads_burnt_fuel</val> <!-- should output interpolated STANDARDS to Serpent files -->
             </outcommod>
         </ads>
@@ -248,22 +249,22 @@ Inventory > Separations > ADS > Sink or Separations again
                         <commod>separated_actinides</commod>
                         <info>
                             <buf_size>5e+3</buf_size>
-                            <efficiencies>
+                            <efficiencies> <!-- The separations are 50% effective based on current methods, the other 50% is sent to final disposal -->
                                 <item>
                                     <comp>94000</comp>
-                                    <eff>0.99</eff>
+                                    <eff>0.5</eff>
                                 </item>
                                 <item>
                                     <comp>93000</comp>
-                                    <eff>0.99</eff>
+                                    <eff>0.5</eff>
                                 </item>
                                 <item>
                                     <comp>95000</comp>
-                                    <eff>0.99</eff>
+                                    <eff>0.5</eff>
                                 </item>
                                 <item>
                                     <comp>96000</comp>
-                                    <eff>0.99</eff>
+                                    <eff>0.5</eff>
                                 </item>
                             </efficiencies>
                         </info>

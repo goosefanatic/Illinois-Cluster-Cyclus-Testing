@@ -205,7 +205,7 @@ Inventory > Separations > ADS > Sink or Separations again
             <val>mixed_actinides</val> 
             </in_commods>
             <outcommod>
-            <case_dir>./nature_explicit_no_source/nature_explicit_nosource_refuel/plot_data_06_actinide_masses.txt</case_dir> <!-- We want this one because we aren't continuously reprocessing the fluid in this model  -->
+            <case_dir>./ADS_serpent_data/nature_explicit_no_source/nature_explicit_nosource_refuel/plot_data_06_actinide_masses.txt</case_dir> <!-- We want this one because we aren't continuously reprocessing the fluid in this model  -->
             <val>ads_burnt_fuel</val> <!-- should output interpolated STANDARDS to Serpent files -->
             </outcommod>
         </ads>
